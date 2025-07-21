@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: WeHeatPay Demo API
+  description: 智慧供热在线缴费平台 Demo 的后端 API 定义
+  version: 1.0.0
+
+paths:
+  /api/v1/user/bind:
+    post:
+      summary: 绑定用户微信与客户编号
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                openid:
+                  type: string
+                  description: "模拟的用户 OpenID"
+                  example: "test_user_001_openid"
+                customer_id:
+                  type: string
+                  description: "供热公司的客户编号"
+                  example: "CUST-1001"
+      responses:
+        '200':
+          description: "绑定成功"
+
+  /api/v1/bills/current:
+    get:
+      summary: 查询当前待缴账单
+      tags: [Bill]
+      parameters:
+        - name: openid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "模拟的用户 OpenID"
+          example: "test_user_001_openid"
+      responses:
+        '200':
+          description: "当前账单详情"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+
+  /api/v1/payments/jsapi:
+    post:
+      summary: 创建JSAPI预支付订单(模拟)
+      tags: [Payment]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                openid:
+                  type: string
+                  description: "发起支付的用户的 OpenID"
+                  example: "test_user_001_openid"
+      responses:
+        '200':
+          description: "返回给前端JSSDK调用的模拟参数"
+
+  /demo/v1/trigger_notify:
+    post:
+      summary: (仅供Demo) 触发模拟的支付成功回调
+      tags: [Demo]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                out_trade_no:
+                  type: string
+                  description: "我们自己系统生成的唯一订单号"
+                  example: "ORDER-20250721-12345"
+      responses:
+        '200':
+          description: "模拟回调处理成功"
+
+components:
+  schemas:
+    Bill:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          example: "CUST-1001"
+        amount:
+          type: number
+          format: float
+          example: 1550.75
+        description:
+          type: string
+          example: "2025-2026年度采暖费"
+        status:
+          type: string
+          example: "UNPAID" # or PAID

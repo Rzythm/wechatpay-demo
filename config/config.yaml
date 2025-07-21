@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+database:
+  host: "127.0.0.1"
+  port: 5432
+  user: "postgres"
+  password: "12345678" # ！！！请替换成您自己的PostgreSQL密码
+  dbname: "weheat_pay_db"
+  sslmode: "disable"
+
+# 在真实项目中，这里会放微信的密钥
+# 在Demo中，我们使用占位符
+wechat:
+  appid: "DEMO_APPID"
+  mchid: "DEMO_MCHID"

@@ -1,0 +1,25 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  # 定义一个名为 'db' 的服务，它就是我们的PostgreSQL数据库
+  db:
+    image: postgres:14-alpine  # 使用官方的、轻量级的PostgreSQL 14镜像
+    container_name: weheat-postgres-db # 给集装箱起个名字，方便管理
+    restart: always # 这样每次您启动Docker，数据库也会自动启动
+    environment:
+      # 这里设置数据库的初始用户名、密码和数据库名
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "12345678" # !!! 请在这里设置一个您自己的密码
+      POSTGRES_DB: weheat_pay_db
+    ports:
+      # 将集装箱的5432端口映射到您电脑的5432端口
+      # 这样我们的Go应用就可以通过 localhost:5432 连接到它
+      - "5432:5432"
+    volumes:
+      # 将数据库的数据持久化存储在本地，防止集装箱删除后数据丢失
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
